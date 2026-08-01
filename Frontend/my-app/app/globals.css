@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fdf1;
+  --foreground: #18311a;
+  --card: #ffffff;
+  --card-foreground: #18311a;
+  --primary: #8dc63f;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf8d8;
+  --secondary-foreground: #18311a;
+  --muted: #f2f7ea;
+  --muted-foreground: #5f7154;
+  --accent: #eaf8d8;
+  --accent-foreground: #18311a;
+  --border: #dbe9c9;
+  --input: #ffffff;
+  --ring: #8dc63f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-prompt);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
