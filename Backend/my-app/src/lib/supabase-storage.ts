@@ -31,3 +31,28 @@ export async function deleteReferenceAudio(assignmentId: string, filename = "ref
   const path = `${assignmentId}/${filename}`;
   await supabase.storage.from(BUCKET).remove([path]);
 }
+
+//student 
+// เพิ่มต่อท้ายไฟล์เดิม (จากส่วน reference audio ที่ทำไว้ก่อนหน้า)
+
+const STUDENT_BUCKET = "student-recordings";
+
+export async function uploadStudentRecording(
+  attemptId: string,
+  file: File | Blob,
+  filename = "recording.webm"
+) {
+  const path = `${attemptId}/${filename}`;
+
+  const { error } = await supabase.storage
+    .from(STUDENT_BUCKET)
+    .upload(path, file, {
+      upsert: true,
+      contentType: "audio/webm",
+    });
+
+  if (error) throw new Error(`Upload failed: ${error.message}`);
+
+  const { data } = supabase.storage.from(STUDENT_BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}
