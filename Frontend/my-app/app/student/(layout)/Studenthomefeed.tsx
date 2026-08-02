@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { Clock, BookOpen, Target, ChevronDown, Mic, Users } from "lucide-react";
+import {
+  Clock,
+  BookOpen,
+  Target,
+  ChevronDown,
+  Mic,
+  Users,
+  School,
+  UserStar,
+} from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel } from "swiper/modules";
@@ -92,14 +101,19 @@ function StatPill({ icon, label, value }: StatPillProps) {
   );
 }
 
-function AssignmentCard({ data, started, onStart, isLast }: AssignmentCardProps) {
+function AssignmentCard({
+  data,
+  started,
+  onStart,
+  isLast,
+}: AssignmentCardProps) {
   const wordCount = data.passageText.trim().split(/\s+/).length;
   const eta = estimateMinutes(data.passageText, data.minWpm, data.maxWpm);
 
   return (
     <div className="relative flex h-full flex-col w-full px-5 pb-5">
       {!started ? (
-        <div className="mt-4 flex flex-col gap-4 rounded-3xl border border-[#DCEEE0] bg-white p-6 pb-18">
+        <div className="mt-4 flex flex-col gap-4 rounded-3xl border border-[#DCEEE0] bg-white p-6 ">
           <h2 className="font-prompt m-0 text-[22px] font-bold text-[#233A2C]">
             {data.title}
           </h2>
@@ -109,8 +123,16 @@ function AssignmentCard({ data, started, onStart, isLast }: AssignmentCardProps)
           </div>
 
           <div className="flex gap-2">
-            <StatPill icon={<BookOpen size={18} />} label="ความยาว" value={`${wordCount} คำ`} />
-            <StatPill icon={<Clock size={18} />} label="เวลาประมาณ" value={eta} />
+            <StatPill
+              icon={<BookOpen size={18} />}
+              label="ความยาว"
+              value={`${wordCount} คำ`}
+            />
+            <StatPill
+              icon={<Clock size={18} />}
+              label="เวลาประมาณ"
+              value={eta}
+            />
             <StatPill
               icon={<Target size={18} />}
               label="เป้าหมาย"
@@ -157,7 +179,10 @@ function AssignmentCard({ data, started, onStart, isLast }: AssignmentCardProps)
           <span className="font-prompt text-[13px] font-semibold text-[#6B8A76]">
             ปัดลงเพื่ออ่านข้อถัดไป
           </span>
-          <ChevronDown size={40} className="animate-bounce font-bold text-[#4CAF6E]" />
+          <ChevronDown
+            size={40}
+            className="animate-bounce font-bold text-[#4CAF6E]"
+          />
         </div>
       )}
     </div>
@@ -180,7 +205,7 @@ export default function StudentHomeFeed() {
       try {
         const response = await fetch(
           process.env.NEXT_PUBLIC_API_BASE_URL + "/api/student/classrooms",
-          { credentials: "include" }
+          { credentials: "include" },
         );
         if (!response.ok) {
           console.error("Fetch classroom failed:", response.status);
@@ -210,23 +235,41 @@ export default function StudentHomeFeed() {
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* ---------- Header (คงที่ ไม่เลื่อน) ---------- */}
-      <div className="px-5 pt-5 pb-2">
-        <p className="font-prompt mb-3.5 text-xl font-semibold text-[#233A2C]">
-          สวัสดี, {studentName} 👋
-        </p>
+      <div className="px-2 lg:px-5 pt-5 pb-2">
+        <div className="flex justify-between items-center w-full  ">
+          <div className="flex items-center gap-2">
+            <img
+              className="size-10 rounded-full"
+              src="https://t3.ftcdn.net/jpg/06/33/54/78/360_F_633547842_AugYzexTpMJ9z1YcpTKUBoqBF0CUCk10.jpg"
+              alt=""
+            />
+            <p className="font-prompt  text-base lg:text-xl font-semibold text-[#233A2C]">
+              สวัสดี, {studentName} 👋
+            </p>
+          </div>
+          <div className="flex justify-end mt-2 gap-2">
+            <div className="border flex flex-col lg:flex-row justify-center  items-center border-gray-200 rounded-2xl  p-2 lg:p-4  w-fit">
+              <span className="font-prompt flex items-center space-x-1 text-[13px] font-semibold text-[#6B8A76]">
+                <School size={16} />
 
-        <span className="font-prompt text-[13px] font-semibold text-[#6B8A76]">
-          ห้องเรียนของฉัน
-        </span>
+                <p>ห้องเรียน {classroom.name}</p>
+              </span>
+              <span className="font-prompt flex items-center ml-2  space-x-1 text-[13px] font-semibold text-[#6B8A76]">
+                <UserStar size={16} />
+                <p className="font-sarabun text-[13px]  font-semibold text-[#6B8A76]">
+                  {classroom.teacher}
+                </p>
+              </span>
+            </div>
+          </div>
+        </div>
 
-        <div className="mt-2 flex items-center justify-between rounded-xl border border-[#73cc44] p-3.5 shadow-xl shadow-gray-100">
+        {/* <div className="mt-2 flex items-center justify-between rounded-xl border border-[#73cc44] p-3.5 shadow-xl shadow-gray-100">
           <div>
             <p className="font-prompt m-0 text-base font-bold text-[#233A2C]">
               {classroom.name}
             </p>
-            <p className="font-sarabun mt-0.5 text-xs text-[#6B8A76]">
-              {classroom.teacher}
-            </p>
+          
             <div className="mt-1.5 flex items-center gap-1">
               <Users size={13} className="text-[#6B8A76]" />
               <span className="font-sarabun text-xs text-[#6B8A76]">
@@ -235,10 +278,10 @@ export default function StudentHomeFeed() {
             </div>
           </div>
           <div className="text-4xl">🧒</div>
-        </div>
+        </div> */}
 
-        <p className="font-prompt mt-4 text-[15px] font-semibold text-[#233A2C]">
-          งานที่ต้องทำ ({PENDING_ASSIGNMENTS.length})
+        <p className="font-prompt mt-4 text-sm ml-2 font-semibold text-[#9fa3a1]">
+          งานที่ต้องทำ {PENDING_ASSIGNMENTS.length} งาน
         </p>
       </div>
 
