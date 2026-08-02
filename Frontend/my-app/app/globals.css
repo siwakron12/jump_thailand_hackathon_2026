@@ -50,3 +50,7 @@ body {
 
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+.color-button {
+  color : #73cc44;
+  /* background-image: linear-gradient(to bottom right, #6cbf3f, #29ce04); */
+}

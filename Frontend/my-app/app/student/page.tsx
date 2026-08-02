@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect } from 'react'
 import { authClient } from "@/lib/auth-client";
+import Footer from './(layout)/footer';
 type Props = {}
 
 export default function page({ }: Props) {
@@ -13,6 +14,9 @@ export default function page({ }: Props) {
   }, []);
 
   return (
-    <div>page</div>
+    <div>
+
+      <Footer/>
+    </div>
   )
 }

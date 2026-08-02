@@ -29,7 +29,7 @@ export default function LoginPage() {
     const { data, error } = await authClient.signIn.email({
       email: account.email,
       password: account.password,
-      // callbackURL: selectedRole === "teacher" ? "/teacher" : "/student",
+      callbackURL: selectedRole === "teacher" ? "/teacher" : "/student",
     });
     setLoading(false);
     console.log("Login response:", { data, error });
@@ -37,7 +37,7 @@ export default function LoginPage() {
       setError("เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่");
       return;
     }
-    // router.push(selectedRole === "teacher" ? "/teacher" : "/student");
+    router.push(selectedRole === "teacher" ? "/teacher" : "/student");
   };
 
   return (
