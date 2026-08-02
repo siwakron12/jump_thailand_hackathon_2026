@@ -111,14 +111,14 @@ function AssignmentCard({
   const eta = estimateMinutes(data.passageText, data.minWpm, data.maxWpm);
 
   return (
-    <div className="relative flex h-full flex-col w-full px-5 pb-5">
+    <div className="relative flex h-full flex-col w-full px-5 ">
       {!started ? (
-        <div className="mt-4 flex flex-col gap-4 rounded-3xl border border-[#DCEEE0] bg-white p-6 ">
+        <div className="mt-2 flex flex-col gap-4 rounded-3xl border border-[#DCEEE0] bg-white p-4 ">
           <h2 className="font-prompt m-0 text-[22px] font-bold text-[#233A2C]">
             {data.title}
           </h2>
 
-          <div className="flex h-40 items-center justify-center rounded-2xl bg-gradient-to-br from-[#E7F6EB] to-[#FFF3E4] text-6xl">
+          <div className="flex h-25 lg:h-40 items-center justify-center rounded-2xl bg-gradient-to-br from-[#E7F6EB] to-[#FFF3E4] text-6xl">
             {data.emoji}
           </div>
 
@@ -146,10 +146,21 @@ function AssignmentCard({
 
           <button
             onClick={() => onStart(data.id)}
-            className="font-prompt my-5 cursor-pointer rounded-full bg-[#73cc44] py-3.5 text-base font-semibold text-white"
+            className="font-prompt my-2 cursor-pointer rounded-full bg-[#73cc44] py-3.5 text-base font-semibold text-white"
           >
             เริ่มอ่าน
           </button>
+          {!isLast && (
+            <div className="  flex flex-col items-center gap-0.5">
+              <span className="font-prompt text-[13px] lg:mt-12 font-semibold text-[#6B8A76]">
+            ปัดลงเพื่ออ่านข้อถัดไป
+          </span>
+              <ChevronDown
+                size={40}
+                className="animate-bounce font-bold text-[#4CAF6E]"
+              />
+            </div>
+          )}
         </div>
       ) : (
         <></>
@@ -172,18 +183,6 @@ function AssignmentCard({
         //     กดเพื่ออ่านออกเสียง
         //   </button>
         // </div>
-      )}
-
-      {!isLast && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-20 flex flex-col items-center gap-0.5">
-          <span className="font-prompt text-[13px] font-semibold text-[#6B8A76]">
-            ปัดลงเพื่ออ่านข้อถัดไป
-          </span>
-          <ChevronDown
-            size={40}
-            className="animate-bounce font-bold text-[#4CAF6E]"
-          />
-        </div>
       )}
     </div>
   );
@@ -280,7 +279,7 @@ export default function StudentHomeFeed() {
           <div className="text-4xl">🧒</div>
         </div> */}
 
-        <p className="font-prompt mt-4 text-sm ml-2 font-semibold text-[#9fa3a1]">
+        <p className="font-prompt mt-2 text-sm ml-2 font-semibold text-[#9fa3a1]">
           งานที่ต้องทำ {PENDING_ASSIGNMENTS.length} งาน
         </p>
       </div>
@@ -293,7 +292,7 @@ export default function StudentHomeFeed() {
         slidesPerView={1}
         speed={550}
         resistanceRatio={0.6}
-        className="min-h-0 w-full flex-1"
+        className="min-h-0 w-full flex-1 overflow-hidden"
         style={{ height: "100%" }}
       >
         {PENDING_ASSIGNMENTS.map((item, idx) => (

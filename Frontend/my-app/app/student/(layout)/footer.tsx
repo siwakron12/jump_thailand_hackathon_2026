@@ -27,12 +27,12 @@ export default function Footer() {
               className="flex flex-col items-center cursor-pointer gap-1 py-1 px-3"
             >
               <Icon
-                size={24}
+                size={16}
                 strokeWidth={isActive ? 2.5 : 2}
                 className={isActive ? "color-button" : "text-neutral-400"}
               />
               <span
-                className={`text-[14px] font-bold ${
+                className={`text-[12px] font-bold ${
                   isActive ? "color-button" : "text-neutral-400"
                 }`}
               >
