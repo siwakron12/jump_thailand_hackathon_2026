@@ -21,9 +21,9 @@ export default function RootLayout({
   return (
     <html
       lang="th"
-      className={`${prompt.variable} h-full antialiased`}
+      className={`${prompt.variable} lg:h-full antialiased`}
     >
-      <body className="min-h-full font-sans">{children}</body>
+      <body className="h-full overflow-hidden font-sans bg-gray-50/5">{children}</body>
     </html>
   );
 }

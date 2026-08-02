@@ -15,7 +15,7 @@ export default function Footer() {
   const router = useRouter();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border rounded-2xl w-full lg:w-2/4 mx-auto border-[#d4d5d3]">
+    <nav className="fixed bottom-0   left-0 right-0 z-50 bg-white border rounded-2xl w-full lg:w-2/4 mx-auto border-[#d4d5d3]">
       <div className="max-w-[480px] mx-auto flex items-center justify-around px-4 py-2">
         {navItems.map(({ label, href, icon: Icon }) => {
           const isActive = pathname === href;

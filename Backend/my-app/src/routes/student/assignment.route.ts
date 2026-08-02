@@ -40,6 +40,7 @@ export const assignmentRoutes = new Elysia({ prefix: "/assignments" })
                     maxAllowedErrors: assignments.maxAllowedErrors,
                     dueAt: assignments.dueAt,
                     createdAt: assignments.createdAt,
+                    imgUrl: assignments.imgUrl,
                 })
                 .from(assignments)
                 .leftJoin(
