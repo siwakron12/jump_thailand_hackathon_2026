@@ -28,6 +28,17 @@ export const auth = betterAuth({
       },
     },
   },
+
+  // เพิ่มใหม่: ให้ frontend คนละ origin เรียก auth ได้ (จำเป็นสำหรับ login แล้ว session หายที่คุยกันไว้ก่อนหน้า)
+  trustedOrigins: process.env.CORS_ORIGIN?.split(",") ?? [],
+
+  // เพิ่มใหม่: ให้ cookie ส่งข้าม origin ได้ (frontend https://localhost:3000 <-> backend คนละ domain)
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+    },
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;

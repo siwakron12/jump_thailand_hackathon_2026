@@ -26,17 +26,18 @@ export default function LoginPage() {
   const handleLogin = async () => {
     setError(null);
     setLoading(true);
-    const { error } = await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email: account.email,
       password: account.password,
-      callbackURL: selectedRole === "teacher" ? "/teacher" : "/student",
+      // callbackURL: selectedRole === "teacher" ? "/teacher" : "/student",
     });
     setLoading(false);
+    console.log("Login response:", { data, error });
     if (error) {
       setError("เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่");
       return;
     }
-    router.push(selectedRole === "teacher" ? "/teacher" : "/student");
+    // router.push(selectedRole === "teacher" ? "/teacher" : "/student");
   };
 
   return (
@@ -45,9 +46,9 @@ export default function LoginPage() {
         {/* Logo */}
         <img src="logo-ai.png" className="size-34 mb-4" alt="" />
         <div className="flex items-center gap-2 mb-4">
-       
+
           <span className="text-2xl font-extrabold text-[#46c000] tracking-wide">
-             เว็บไซต์ช่างพูด (Demo)
+            เว็บไซต์ช่างพูด (Demo)
           </span>
         </div>
 
@@ -60,22 +61,20 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setSelectedRole("teacher")}
-            className={`flex-1 h-11 rounded-full cursor-pointer  text-sm font-semibold transition ${
-              selectedRole === "teacher"
+            className={`flex-1 h-11 rounded-full cursor-pointer  text-sm font-semibold transition ${selectedRole === "teacher"
                 ? "border-[#00A651] bg-[#00A651] text-white"
                 : " bg-white text-neutral-600"
-            }`}
+              }`}
           >
             เข้าครู
           </button>
           <button
             type="button"
             onClick={() => setSelectedRole("student")}
-            className={`flex-1 cursor-pointer h-11 rounded-full  text-sm font-semibold transition ${
-              selectedRole === "student"
+            className={`flex-1 cursor-pointer h-11 rounded-full  text-sm font-semibold transition ${selectedRole === "student"
                 ? "border-[#00A651] bg-[#00A651] text-white"
                 : " bg-white text-neutral-600"
-            }`}
+              }`}
           >
             เข้านักเรียน
           </button>
