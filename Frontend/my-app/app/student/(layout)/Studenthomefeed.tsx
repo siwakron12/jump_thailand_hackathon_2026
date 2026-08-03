@@ -6,7 +6,6 @@ import {
   BookOpen,
   Target,
   ChevronDown,
-  Mic,
   Users,
   School,
   UserStar,
@@ -16,6 +15,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/mousewheel";
+import Readingview from "./Readingview";
 
 interface AssignmentItem {
   id: string;
@@ -25,6 +25,7 @@ interface AssignmentItem {
   minWpm: number;
   maxWpm: number;
   dueAt: string;
+  imgUrl?: string;
 }
 
 interface StatPillProps {
@@ -44,47 +45,28 @@ const DEFAULT_CLASSROOM = {
   name: "ป.3/1",
   teacher: "ครูอารยา",
   studentCount: 25,
-  classroomId: "classroom-1",
+  classroomId: "",
 };
-
-const PENDING_ASSIGNMENTS: AssignmentItem[] = [
-  {
-    id: "a1",
-    title: "กระต่ายกับเต่า",
-    emoji: "🐢",
-    passageText:
-      "กาลครั้งหนึ่งนานมาแล้ว มีกระต่ายตัวหนึ่งที่วิ่งเร็วมาก มันชอบอวดว่าตัวเองวิ่งเร็วที่สุดในป่า วันหนึ่งเต่าตัวหนึ่งเดินผ่านมาช้าๆ กระต่ายจึงหัวเราะเยาะเต่าว่าเดินช้าเหมือนคนขี้เกียจ เต่าจึงท้าให้กระต่ายแข่งวิ่งกันดู กระต่ายรับคำท้าทันทีเพราะมั่นใจว่าตัวเองจะชนะแน่นอน เมื่อเริ่มแข่งขัน กระต่ายวิ่งนำไปไกลมาก จนคิดว่ามีเวลาเหลือเฟือ จึงแวะนอนพักใต้ต้นไม้ใหญ่ ส่วนเต่าเดินต่อไปเรื่อยๆ อย่างไม่ย่อท้อ สุดท้ายเต่าเดินถึงเส้นชัยก่อนกระต่ายที่ยังนอนหลับอยู่ นิทานเรื่องนี้สอนให้รู้ว่า ความขยันและความสม่ำเสมอ ย่อมเอาชนะความเร็วที่ประมาทได้เสมอ",
-    minWpm: 40,
-    maxWpm: 120,
-    dueAt: "20 ส.ค. 2567",
-  },
-  {
-    id: "a2",
-    title: "ลูกหมูสามตัว",
-    emoji: "🐷",
-    passageText:
-      "ลูกหมูสามตัวออกจากบ้านไปสร้างบ้านของตัวเอง ตัวแรกสร้างบ้านด้วยฟาง ตัวที่สองสร้างด้วยไม้ ส่วนตัวที่สามสร้างด้วยอิฐอย่างตั้งใจ วันหนึ่งหมาป่าตัวร้ายมาเป่าบ้านฟางจนพังทลาย ลูกหมูตัวแรกวิ่งหนีไปบ้านตัวที่สอง หมาป่าเป่าบ้านไม้จนพังอีกเช่นกัน ลูกหมูทั้งสองจึงวิ่งไปหลบที่บ้านอิฐของตัวที่สาม หมาป่าพยายามเป่าเท่าไรบ้านอิฐก็ไม่พังเลย สุดท้ายหมาป่าจึงยอมแพ้และหนีไป",
-    minWpm: 40,
-    maxWpm: 120,
-    dueAt: "22 ส.ค. 2567",
-  },
-  {
-    id: "a3",
-    title: "มดกับตั๊กแตน",
-    emoji: "🐜",
-    passageText:
-      "ในฤดูร้อน ตั๊กแตนร้องเพลงเล่นทั้งวันอย่างสบายใจ ขณะที่มดขยันขนอาหารเก็บไว้ในรัง ตั๊กแตนหัวเราะเยาะมดว่าทำงานหนักเกินไป เมื่อฤดูหนาวมาถึง อาหารเริ่มขาดแคลน ตั๊กแตนหิวโหยจึงไปขอความช่วยเหลือจากมด มดจึงแบ่งอาหารที่เก็บไว้ให้ตั๊กแตนได้กินอย่างอบอุ่นใจ",
-    minWpm: 40,
-    maxWpm: 120,
-    dueAt: "25 ส.ค. 2567",
-  },
-];
 
 function estimateMinutes(text: string, minWpm: number, maxWpm: number): string {
   const words = text.trim().split(/\s+/).length;
   const maxMin = Math.max(1, Math.round(words / minWpm));
   const minMin = Math.max(1, Math.round(words / maxWpm));
   return `${minMin}-${maxMin} นาที`;
+}
+
+function formatDueAt(dueAt: string): string {
+  const date = new Date(dueAt);
+
+  if (Number.isNaN(date.getTime())) {
+    return dueAt;
+  }
+
+  return new Intl.DateTimeFormat("th-TH", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }
 
 function StatPill({ icon, label, value }: StatPillProps) {
@@ -118,9 +100,9 @@ function AssignmentCard({
             {data.title}
           </h2>
 
-          <div className="flex h-25 lg:h-40 items-center justify-center rounded-2xl bg-gradient-to-br from-[#E7F6EB] to-[#FFF3E4] text-6xl">
-            {data.emoji}
-          </div>
+            
+            <img className="w-full h-auto max-w-[350px] mx-auto rounded-2xl" src={data?.imgUrl || "https://cdn-local.mebmarket.com/meb/server1/342804/Thumbnail/book_detail_large.gif?5="} alt="Book Thumbnail" />
+     
 
           <div className="flex gap-2">
             <StatPill
@@ -141,7 +123,7 @@ function AssignmentCard({
           </div>
 
           <span className="font-sarabun text-xs text-[#6B8A76]">
-            กำหนดส่ง: {data.dueAt}
+            กำหนดส่ง: {formatDueAt(data.dueAt)}
           </span>
 
           <button
@@ -153,8 +135,8 @@ function AssignmentCard({
           {!isLast && (
             <div className="  flex flex-col items-center gap-0.5">
               <span className="font-prompt text-[13px] lg:mt-12 font-semibold text-[#6B8A76]">
-            ปัดลงเพื่ออ่านข้อถัดไป
-          </span>
+                ปัดลงเพื่ออ่านข้อถัดไป
+              </span>
               <ChevronDown
                 size={40}
                 className="animate-bounce font-bold text-[#4CAF6E]"
@@ -163,26 +145,13 @@ function AssignmentCard({
           )}
         </div>
       ) : (
-        <></>
-        // <div className="mt-4 flex min-h-0 flex-1 flex-col gap-3.5 rounded-3xl border border-[#DCEEE0] bg-white p-5">
-        //   <div className="flex items-center gap-2.5">
-        //     <span className="text-3xl">{data.emoji}</span>
-        //     <h2 className="font-prompt m-0 text-lg font-bold text-[#233A2C]">
-        //       {data.title}
-        //     </h2>
-        //   </div>
-
-        //   <div className="flex-1 overflow-y-auto rounded-2xl bg-[#F4FBF3] p-4">
-        //     <p className="font-sarabun m-0 text-[17px] leading-[1.9] text-[#233A2C]">
-        //       {data.passageText}
-        //     </p>
-        //   </div>
-
-        //   <button className="font-prompt flex items-center justify-center gap-2 rounded-full bg-[#FF9D4D] py-4 text-base font-semibold text-white">
-        //     <Mic size={20} />
-        //     กดเพื่ออ่านออกเสียง
-        //   </button>
-        // </div>
+        <Readingview
+          id={data.id}
+          emoji={data.emoji}
+          title={data.title}
+          passageText={data.passageText}
+          
+        />
       )}
     </div>
   );
@@ -192,7 +161,10 @@ export default function StudentHomeFeed() {
   const [studentName, setStudentName] = useState("น้องอุ่นใจ");
   const [classroom, setClassroom] = useState(DEFAULT_CLASSROOM);
   const [startedMap, setStartedMap] = useState<Record<string, boolean>>({});
+  const [assignments, setAssignments] = useState<AssignmentItem[]>([]);
+  const [loadingAssignments, setLoadingAssignments] = useState(true);
 
+  // ดึงชื่อผู้ใช้จาก session + ห้องเรียนของนักเรียน
   useEffect(() => {
     const fetchSession = async () => {
       const session = await authClient.getSession();
@@ -223,9 +195,38 @@ export default function StudentHomeFeed() {
       }
     }
 
-    fetchSession();
+    // fetchSession();
     fetchClass();
   }, []);
+
+  // ดึงงานที่ต้องทำจริงจาก backend เมื่อรู้ classroomId แล้ว
+  useEffect(() => {
+    if (!classroom.classroomId) return;
+
+    async function fetchAssignments() {
+      setLoadingAssignments(true);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/student/assignments/pending?classroomId=${classroom.classroomId}`,
+          { credentials: "include" },
+        );
+        if (!response.ok) {
+          console.error("Fetch assignments failed:", response.status);
+          setAssignments([]);
+          return;
+        }
+        const { data } = await response.json();
+        setAssignments(data ?? []);
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+        setAssignments([]);
+      } finally {
+        setLoadingAssignments(false);
+      }
+    }
+
+    fetchAssignments();
+  }, [classroom.classroomId]);
 
   function handleStart(id: string) {
     setStartedMap((prev) => ({ ...prev, [id]: true }));
@@ -250,7 +251,6 @@ export default function StudentHomeFeed() {
             <div className="border flex flex-col lg:flex-row justify-center  items-center border-gray-200 rounded-2xl  p-2 lg:p-4  w-fit">
               <span className="font-prompt flex items-center space-x-1 text-[13px] font-semibold text-[#6B8A76]">
                 <School size={16} />
-
                 <p>ห้องเรียน {classroom.name}</p>
               </span>
               <span className="font-prompt flex items-center ml-2  space-x-1 text-[13px] font-semibold text-[#6B8A76]">
@@ -263,49 +263,47 @@ export default function StudentHomeFeed() {
           </div>
         </div>
 
-        {/* <div className="mt-2 flex items-center justify-between rounded-xl border border-[#73cc44] p-3.5 shadow-xl shadow-gray-100">
-          <div>
-            <p className="font-prompt m-0 text-base font-bold text-[#233A2C]">
-              {classroom.name}
-            </p>
-          
-            <div className="mt-1.5 flex items-center gap-1">
-              <Users size={13} className="text-[#6B8A76]" />
-              <span className="font-sarabun text-xs text-[#6B8A76]">
-                {classroom.studentCount} คน
-              </span>
-            </div>
-          </div>
-          <div className="text-4xl">🧒</div>
-        </div> */}
-
         <p className="font-prompt mt-2 text-sm ml-2 font-semibold text-[#9fa3a1]">
-          งานที่ต้องทำ {PENDING_ASSIGNMENTS.length} งาน
+          งานที่ต้องทำ {assignments.length} งาน
         </p>
       </div>
 
       {/* ---------- Feed แบบปัดขึ้น-ลง ด้วย Swiper ---------- */}
-      <Swiper
-        direction="vertical"
-        modules={[Mousewheel]}
-        mousewheel={{ forceToAxis: true }}
-        slidesPerView={1}
-        speed={550}
-        resistanceRatio={0.6}
-        className="min-h-0 w-full flex-1 overflow-hidden"
-        style={{ height: "100%" }}
-      >
-        {PENDING_ASSIGNMENTS.map((item, idx) => (
-          <SwiperSlide key={item.id}>
-            <AssignmentCard
-              data={item}
-              started={!!startedMap[item.id]}
-              onStart={handleStart}
-              isLast={idx === PENDING_ASSIGNMENTS.length - 1}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      {loadingAssignments ? (
+        <div className="flex flex-1 items-center justify-center">
+          <span className="font-prompt text-sm text-[#6B8A76]">
+            กำลังโหลดงาน...
+          </span>
+        </div>
+      ) : assignments.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center">
+          <span className="font-prompt text-sm text-[#6B8A76]">
+            ยังไม่มีงานที่ต้องทำ 🎉
+          </span>
+        </div>
+      ) : (
+        <Swiper
+          direction="vertical"
+          modules={[Mousewheel]}
+          mousewheel={{ forceToAxis: true }}
+          slidesPerView={1}
+          speed={550}
+          resistanceRatio={0.6}
+          className="min-h-0 w-full flex-1 overflow-hidden"
+          style={{ height: "100%" }}
+        >
+          {assignments.map((item, idx) => (
+            <SwiperSlide key={item.id}>
+              <AssignmentCard
+                data={item}
+                started={!!startedMap[item.id]}
+                onStart={handleStart}
+                isLast={idx === assignments.length - 1}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 }
