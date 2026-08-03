@@ -207,7 +207,7 @@ export default function StudentHomeFeed() {
       setLoadingAssignments(true);
       try {
         const response = await fetch(
-          `$/api/student/assignments/pending?classroomId=${classroom.classroomId}`,
+          `/api/student/assignments/pending?classroomId=${classroom.classroomId}`,
           { credentials: "include" },
         );
         if (!response.ok) {
