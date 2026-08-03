@@ -35,13 +35,16 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --font-sans: var(--font-prompt);
+  --font-sarabun: "Sarabun", sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html, body, #__next {
+html,
+body,
+#__next {
   height: 100%;
 }
 
@@ -51,7 +54,33 @@ body {
 
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
 .color-button {
-  color : #73cc44;
+  color: #73cc44;
   /* background-image: linear-gradient(to bottom right, #6cbf3f, #29ce04); */
+}
+
+.notebook-paper {
+  --line-height: 2.15rem;
+  background-color: #fffdf7;
+  background-image: repeating-linear-gradient(to bottom,
+      transparent 0,
+      transparent calc(var(--line-height) - 1px),
+      #cfe3d6 calc(var(--line-height) - 1px),
+      #cfe3d6 var(--line-height));
+  background-position: 0 0.4rem;
+  /* ขยับเส้นแรกให้ตรงใต้บรรทัดแรกของ text */
+  position: relative;
+}
+
+/* เส้นขอบซ้ายสีแดงจางๆ แบบสมุดจริง (ตัดออกได้ถ้าไม่ต้องการ) */
+.notebook-paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2.0rem;
+  width: 1px;
+  background: #f3b8b8;
+  opacity: 0.6;
 }

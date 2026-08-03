@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Mic, Square, Loader2, RotateCcw, CheckCircle2, AlertCircle } from "lucide-react";
+import TranscriptHighlight, { type WordError } from "./transcript-highlight";
 
 interface ReadingViewProps {
   id: string;
@@ -12,6 +13,14 @@ interface ReadingViewProps {
 
 type Status = "idle" | "recording" | "submitting" | "success" | "error";
 
+interface AttemptResult {
+  wpm: string;
+  status: string;
+  transcriptText: string;
+  totalErrors: number;
+  errors: WordError[];
+}
+
 export default function ReadingView({
   id,
   emoji,
@@ -20,6 +29,7 @@ export default function ReadingView({
 }: ReadingViewProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [result, setResult] = useState<AttemptResult | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -83,12 +93,29 @@ export default function ReadingView({
       );
 
       if (!response.ok) {
-        console.error("Submit attempt failed:", response.status);
-        setErrorMsg("ส่งคลิปเสียงไม่สำเร็จ กรุณาลองใหม่");
+        let serverMessage: string | undefined;
+        try {
+          const errBody = await response.json();
+          serverMessage = errBody?.message ?? errBody?.error;
+        } catch {
+          // response ไม่ใช่ JSON หรือ body ว่าง ก็ปล่อยผ่าน ใช้ default message ด้านล่างแทน
+        }
+        console.error("Submit attempt failed:", response.status, serverMessage);
+        setErrorMsg(serverMessage || "ส่งคลิปเสียงไม่สำเร็จ กรุณาลองใหม่");
         setStatus("error");
         return;
       }
 
+      const body = await response.json();
+      console.log("Submit attempt response:", body);
+      const attempt = body?.data?.attempt;
+      setResult({
+        wpm: attempt?.wpm,
+        status: attempt?.status,
+        transcriptText: attempt?.transcriptText,
+        totalErrors: attempt?.totalErrors,
+        errors: body?.data?.errors ?? [],
+      });
       setStatus("success");
     } catch (err) {
       console.error("Error submitting attempt:", err);
@@ -107,6 +134,7 @@ export default function ReadingView({
 
   function handleRetry() {
     setErrorMsg(null);
+    setResult(null);
     setStatus("idle");
   }
 
@@ -119,16 +147,23 @@ export default function ReadingView({
         </h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto max-h-125 rounded-2xl bg-[#F4FBF3] p-4">
-        <p className="font-sarabun m-0 text-[17px] leading-[1.9] text-[#233A2C]">
-          {passageText}
-        </p>
+      <div className="notebook-paper flex-1 overflow-y-auto max-h-125 rounded-2xl p-3 pl-9">
+        {result ? (
+          <TranscriptHighlight
+            passageText={passageText}
+            errors={result.errors}
+          />
+        ) : (
+          <p className=" font-sarabun text-[20px] leading-[2.15rem] text-[#233A2C]">
+            {passageText}
+          </p>
+        )}
       </div>
 
-      {status === "success" && (
+      {status === "success" && result && (
         <div className="font-prompt flex items-center justify-center gap-2 text-sm font-semibold text-[#048921]">
           <CheckCircle2 size={18} />
-          ส่งคลิปเสียงสำเร็จแล้ว
+          ส่งคลิปเสียงสำเร็จแล้ว ({result.wpm} WPM)
         </div>
       )}
 
