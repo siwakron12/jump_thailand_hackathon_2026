@@ -84,7 +84,7 @@ export default function ReadingView({
       formData.append("durationSeconds", String(durationSeconds));
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/student/attempts/${id}/submit`,
+        `$/api/student/attempts/${id}/submit`,
         {
           method: "POST",
           credentials: "include",

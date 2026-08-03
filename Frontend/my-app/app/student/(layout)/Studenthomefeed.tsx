@@ -175,7 +175,7 @@ export default function StudentHomeFeed() {
     async function fetchClass() {
       try {
         const response = await fetch(
-          process.env.NEXT_PUBLIC_API_BASE_URL + "/api/student/classrooms",
+           "/api/student/classrooms",
           { credentials: "include" },
         );
         if (!response.ok) {
@@ -207,7 +207,7 @@ export default function StudentHomeFeed() {
       setLoadingAssignments(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/student/assignments/pending?classroomId=${classroom.classroomId}`,
+          `$/api/student/assignments/pending?classroomId=${classroom.classroomId}`,
           { credentials: "include" },
         );
         if (!response.ok) {
