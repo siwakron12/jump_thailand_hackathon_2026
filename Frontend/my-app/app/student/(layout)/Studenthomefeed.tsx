@@ -9,6 +9,7 @@ import {
   Users,
   School,
   UserStar,
+  NotebookPen,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -72,11 +73,11 @@ function formatDueAt(dueAt: string): string {
 function StatPill({ icon, label, value }: StatPillProps) {
   return (
     <div className="flex flex-1 flex-col items-center gap-1 border-l border-[#cfd1cf] pl-3 first:border-none first:pl-0">
-      <div className="flex size-14 items-center justify-center rounded-xl text-[#048921]">
+      <div className="flex lg:size-14 items-center justify-center rounded-xl text-[#048921]">
         {icon}
       </div>
-      <span className="font-prompt text-[11px] text-[#6B8A76]">{label}</span>
-      <span className="font-prompt text-[13px] font-semibold text-[#233A2C]">
+      <span className="font-prompt text-[10px] text-[#6B8A76]">{label}</span>
+      <span className="font-prompt text-[9px] lg:text-[13px] font-semibold text-[#233A2C]">
         {value}
       </span>
     </div>
@@ -100,11 +101,11 @@ function AssignmentCard({
             {data.title}
           </h2>
 
-            
-            <img className="w-full h-auto max-w-[350px] mx-auto rounded-2xl" src={data?.imgUrl || "https://cdn-local.mebmarket.com/meb/server1/342804/Thumbnail/book_detail_large.gif?5="} alt="Book Thumbnail" />
-     
 
-          <div className="flex gap-2">
+          <img className="w-full h-auto max-w-[200px] lg:max-w-[350px] mx-auto rounded-2xl" src={data?.imgUrl || "https://cdn-local.mebmarket.com/meb/server1/342804/Thumbnail/book_detail_large.gif?5="} alt="Book Thumbnail" />
+
+
+          <div className="flex  gap-2">
             <StatPill
               icon={<BookOpen size={18} />}
               label="ความยาว"
@@ -128,7 +129,7 @@ function AssignmentCard({
 
           <button
             onClick={() => onStart(data.id)}
-            className="font-prompt my-2 cursor-pointer rounded-full bg-[#73cc44] py-3.5 text-base font-semibold text-white"
+            className="font-prompt lg:my-2 cursor-pointer rounded-full bg-[#73cc44] py-1.5 lg:py-3.5 text-base font-semibold text-white"
           >
             เริ่มอ่าน
           </button>
@@ -150,7 +151,7 @@ function AssignmentCard({
           emoji={data.emoji}
           title={data.title}
           passageText={data.passageText}
-          
+
         />
       )}
     </div>
@@ -175,7 +176,7 @@ export default function StudentHomeFeed() {
     async function fetchClass() {
       try {
         const response = await fetch(
-           "/api/student/classrooms",
+          "/api/student/classrooms",
           { credentials: "include" },
         );
         if (!response.ok) {
@@ -263,7 +264,8 @@ export default function StudentHomeFeed() {
           </div>
         </div>
 
-        <p className="font-prompt mt-2 text-sm ml-2 font-semibold text-[#9fa3a1]">
+        <p className="font-prompt mt-2 text-sm ml-2 flex items-center gap-2 font-semibold ">
+          <NotebookPen className="text-green-800" />
           งานที่ต้องทำ {assignments.length} งาน
         </p>
       </div>
@@ -289,8 +291,8 @@ export default function StudentHomeFeed() {
           slidesPerView={1}
           speed={550}
           resistanceRatio={0.6}
-          className="min-h-0 w-full flex-1 overflow-hidden"
-          style={{ height: "100%" }}
+          className="w-full h-[calc(100vh-150px)]"
+
         >
           {assignments.map((item, idx) => (
             <SwiperSlide key={item.id}>
