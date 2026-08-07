@@ -15,12 +15,12 @@ export default function page({ }: Props) {
   }, []);
 
   return (
-    <div className="w-full lg:w-2/4 mx-auto  h-full">
+    <div className=" h-full">
   
         <StudentHomeFeed />
   
-      <div className="pb-20"></div>
-      <Footer />
+  
+      
     </div>
   )
 }

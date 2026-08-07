@@ -7,6 +7,39 @@ import { assignments } from "../../db/schema/assignment-schema";
 import { attempts } from "../../db/schema/attempt-schema";
 export const assignmentRoutes = new Elysia({ prefix: "/assignments" })
     .use(authMiddleware)
+    //get my assignments
+    .get("/my-assignments", async ({ session, set }) => {
+        if (!session?.user?.id) {
+            set.status = 401;
+            return { error: "Unauthorized" };
+        }
+
+        const data = await db
+            .select({
+                attemptId: attempts.id,
+                attemptNo: attempts.attemptNo,
+                transcriptText: attempts.transcriptText,
+                durationSeconds: attempts.durationSeconds,
+                audio_url: attempts.audioUrl,
+                status: attempts.status,
+                speed_flag: attempts.speedFlag,
+                assignmentId: assignments.id,
+                title: assignments.title,
+                passageText: assignments.passageText,
+                wordCount: assignments.wordCount,
+                dueAt: assignments.dueAt,
+                imgUrl: assignments.imgUrl,
+            })
+            .from(attempts)
+            .innerJoin(
+                assignments,
+                eq(attempts.assignmentId, assignments.id)
+            )
+            .where(eq(attempts.studentId, session.user.id));
+
+        return { data };
+    })
+
 
     // GET ALL   // โจทย์ที่ยังไม่เคยอ่านเลยสักครั้ง
     .get(

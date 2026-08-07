@@ -6,7 +6,7 @@ import { Home, ClipboardList, User } from "lucide-react";
 
 const navItems = [
   { label: "คลังอ่าน", href: "/student", icon: Home },
-  { label: "งานของฉัน", href: "/student/tasks", icon: ClipboardList },
+  { label: "งานของฉัน", href: "/student/myWrok", icon: ClipboardList },
   { label: "โปรไฟล์", href: "/student/profile", icon: User },
 ];
 
@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <nav className="fixed bottom-0   left-0 right-0 z-50 bg-white border rounded-2xl w-full lg:w-2/4 mx-auto border-[#d4d5d3]">
-      <div className="max-w-[480px] mx-auto flex items-center justify-around px-4 py-2">
+      <div className="max-w-[480px] mx-auto flex items-center justify-around px-4 py-2"   >
         {navItems.map(({ label, href, icon: Icon }) => {
           const isActive = pathname === href;
           return (
