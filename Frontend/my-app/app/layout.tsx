@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="th"
       className={`${prompt.variable} ${sarabun.variable} lg:h-full antialiased`}
     >
-      <body className="h-full overflow-hidden font-sans bg-gray-50/5">{children}</body>
+      <body className="font-sans bg-[#f4f6f5] w-full">{children}</body>
     </html>
   );
 }
