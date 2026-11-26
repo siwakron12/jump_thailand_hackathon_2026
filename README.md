@@ -26,6 +26,18 @@ https://github.com/user-attachments/assets/8e98cced-ff6f-4950-bcbf-d36fd657c501
 | `assignments` | บทความที่ครูให้อ่าน พร้อมเกณฑ์ (`min_wpm`, `max_wpm`, `max_allowed_errors`) และเสียงเฉลยของครู |
 | `attempts` | การอ่าน 1 ครั้งของนักเรียน 1 คน ซึ่งอ่านซ้ำได้ (`attempt_no`) เก็บ transcript, WPM และผลประเมิน |
 | `word_errors` | คำที่อ่านผิดใน attempt นั้น ระบุตำแหน่งคำ (`word_index`) คำที่ควรอ่าน และคำที่ AI ได้ยิน |
+
+## Tech Stack 
+
+| ส่วน | เทคโนโลยี |
+|---|---|
+| Runtime / Framework | Bun + Elysia |
+| Database | PostgreSQL (Supabase) + Drizzle ORM |
+| Auth | Better Auth (email/password, cookie session, field `role`) |
+| Speech-to-Text | Typhoon ASR (`typhoon-asr-realtime`) ผ่าน OpenAI-compatible SDK |
+| Audio convert | `ffmpeg-static` แปลงเป็น wav 16kHz mono ผ่าน pipe โดยไม่เขียนไฟล์ temp |
+| File storage | Supabase Storage (bucket `assignment-audio`, `student-recordings`) |
+| ตัดคำไทย | `Intl.Segmenter("th")` |
 ## โครงสร้าง Repository
 
 ```
